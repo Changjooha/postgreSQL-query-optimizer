@@ -1,0 +1,26 @@
+--- a/src/backend/optimizer/path/costsize.c
++++ b/src/backend/optimizer/path/costsize.c
+@@
+     path->startup_cost = startup_cost;
+     path->total_cost = startup_cost + cpu_run_cost + disk_run_cost;
++
++    /*
++     * Experimental Sequential Scan penalty.
++     *
++     * This modification was added for an educational experiment
++     * to observe how changing the estimated cost of a scan path
++     * affects PostgreSQL's optimizer decision.
++     */
++    if (baserel->pages > 100)
++    {
++        elog(NOTICE,
++             "[Assignment 4 AFTER] Original SeqScan cost: pages=%.0f, total_cost=%.2f",
++             (double) baserel->pages,
++             path->total_cost);
++
++        path->total_cost *= 2.0;
++
++        elog(NOTICE,
++             "[Assignment 4 AFTER] Penalty applied! Penalized total_cost=%.2f",
++             path->total_cost);
++    }
