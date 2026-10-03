@@ -1,0 +1,19 @@
+# PostgreSQL build files
+build/
+*.o
+*.so
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
