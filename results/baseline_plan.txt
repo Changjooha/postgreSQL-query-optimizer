@@ -1,0 +1,55 @@
+NOTICE: [Assignment 4 BEFORE]
+SeqScan large relation: pages=541, total_cost=1916.00
+
+
+Hash Join
+(cost=259.30..2526.87 rows=3265 width=31)
+
+  Hash Cond: (e.course_id = c.course_id)
+
+  -> Hash Join
+     (cost=236.17..2348.67 rows=32647 width=18)
+
+     Hash Cond: (e.student_id = s.student_id)
+
+     -> Seq Scan on enrollment e
+        (cost=0.00..1916.00 rows=74827 width=10)
+
+        Filter:
+        ((grade)::text = ANY ('{A,B,C}'::text[]))
+
+     -> Hash
+        (cost=181.64..181.64 rows=4363 width=16)
+
+        -> Bitmap Heap Scan on student s
+           (cost=54.10..181.64 rows=4363 width=16)
+
+           Recheck Cond:
+           (entrance_year >= 2020)
+
+           -> Bitmap Index Scan on idx_student_year
+              (cost=0.00..53.01 rows=4363 width=0)
+
+              Index Cond:
+              (entrance_year >= 2020)
+
+  -> Hash
+     (cost=21.88..21.88 rows=100 width=21)
+
+     -> Hash Join
+        (cost=1.14..21.88 rows=100 width=21)
+
+        Hash Cond:
+        (c.dept_id = d.dept_id)
+
+        -> Seq Scan on course c
+           (cost=0.00..17.00 rows=1000 width=18)
+
+        -> Hash
+           (cost=1.12..1.12 rows=1 width=11)
+
+           -> Seq Scan on department d
+              (cost=0.00..1.12 rows=1 width=11)
+
+              Filter:
+              ((dept_name)::text = 'Dept_3'::text)
